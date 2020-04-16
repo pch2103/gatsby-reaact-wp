@@ -16,7 +16,7 @@ class Posts extends Component {
 						{data.allWordpressPost.edges.map(
 								({node}) => (
 										<div key={node.id}>
-											<Link to={'post/' + node.slug}>
+											<Link to={'/post/' + node.slug}>
 												<h3>{node.title}</h3>
 											</Link>
 											<div dangerouslySetInnerHTML={{__html: node.excerpt}}/>
