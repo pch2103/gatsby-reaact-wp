@@ -36,6 +36,7 @@ exports.createPages = async ({ graphql, actions }) => {
         edges {
           node {
             id
+            slug
             path
             status
             template
@@ -78,13 +79,19 @@ exports.createPages = async ({ graphql, actions }) => {
 	})
 
 	const postTemplate = path.resolve(`./src/templates/post.js`)
+	const postsTemplate = path.resolve(`./src/templates/posts.js`)
 	// We want to create a detailed page for each post node.
 	// The path field stems from the original WordPress link
 	// and we use it for the slug to preserve url structure.
 	// The Post ID is prefixed with 'POST_'
+	createPage({
+		path: `/posts/`,
+		component: slash(postsTemplate),
+	});
+
 	allWordpressPost.edges.forEach(edge => {
 		createPage({
-			path: edge.node.path,
+			path: `/post/${edge.node.slug}`,
 			component: slash(postTemplate),
 			context: {
 				id: edge.node.id,
