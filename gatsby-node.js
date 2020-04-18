@@ -6,46 +6,12 @@
 
 const path = require(`path`)
 const { slash } = require(`gatsby-core-utils`)
+const queryAll = require(`./src/queries/queryAll.js`)
+const createPaginatedPages = require('gatsby-paginate')
 
-// Implement the Gatsby API “createPages”. This is
-// called after the Gatsby bootstrap is finished so you have
-// access to any information necessary to programmatically
-// create pages.
-// Will create pages for WordPress pages (route : /{slug})
-// Will create pages for WordPress posts (route : /post/{slug})
 exports.createPages = async ({ graphql, actions }) => {
 	const { createPage } = actions
-
-	// The “graphql” function allows us to run arbitrary
-	// queries against the local Gatsby GraphQL schema. Think of
-	// it like the site has a built-in database constructed
-	// from the fetched data that you can run queries against.
-	const result = await graphql(`
-    {
-      allWordpressPage {
-        edges {
-          node {
-            id
-            path
-            status
-            template
-          }
-        }
-      }
-      allWordpressPost {
-        edges {
-          node {
-            id
-            slug
-            path
-            status
-            template
-            format
-          }
-        }
-      }
-    }
-  `)
+	const result = await graphql(queryAll)
 
 	// Check for any errors
 	if (result.errors) {
@@ -57,19 +23,9 @@ exports.createPages = async ({ graphql, actions }) => {
 
 	// Create Page pages.
 	const pageTemplate = path.resolve(`./src/templates/page.js`)
-	// We want to create a detailed page for each page node.
-	// The path field contains the relative original WordPress link
-	// and we use it for the slug to preserve url structure.
-	// The Page ID is prefixed with 'PAGE_'
+
 	allWordpressPage.edges.forEach(edge => {
-		// Gatsby uses Redux to manage its internal state.
-		// Plugins and sites can use functions like "createPage"
-		// to interact with Gatsby.
 		createPage({
-			// Each page is required to have a `path` as well
-			// as a template component. The `context` is
-			// optional but is often necessary so the template
-			// can query data specific to each page.
 			path: edge.node.path,
 			component: slash(pageTemplate),
 			context: {
@@ -79,15 +35,19 @@ exports.createPages = async ({ graphql, actions }) => {
 	})
 
 	const postTemplate = path.resolve(`./src/templates/post.js`)
-	const postsTemplate = path.resolve(`./src/templates/posts.js`)
-	// We want to create a detailed page for each post node.
-	// The path field stems from the original WordPress link
-	// and we use it for the slug to preserve url structure.
-	// The Post ID is prefixed with 'POST_'
-	createPage({
-		path: `/posts/`,
-		component: slash(postsTemplate),
-	});
+
+	// createPage({
+	// 	path: `/posts/`,
+	// 	component: slash(postsTemplate),
+	// });
+	//
+	createPaginatedPages({
+		edges: allWordpressPost.edges,
+		createPage: createPage,
+		pageTemplate: './src/templates/posts.js',
+		pageLength: 3,
+		pathPrefix: 'posts',
+	})
 
 	allWordpressPost.edges.forEach(edge => {
 		createPage({
