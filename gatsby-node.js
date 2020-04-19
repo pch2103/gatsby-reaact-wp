@@ -36,11 +36,6 @@ exports.createPages = async ({ graphql, actions }) => {
 
 	const postTemplate = path.resolve(`./src/templates/post.js`)
 
-	// createPage({
-	// 	path: `/posts/`,
-	// 	component: slash(postsTemplate),
-	// });
-	//
 	createPaginatedPages({
 		edges: allWordpressPost.edges,
 		createPage: createPage,

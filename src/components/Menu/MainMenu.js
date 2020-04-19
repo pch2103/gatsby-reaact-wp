@@ -6,6 +6,7 @@ const MainMenu = (props) => {
 	// console.log("MAIN_MENU", data)
 	return (
 			<div>
+				<h3>Local Menu:</h3>
 				<ul>
 					{
 						data.map(item =>
@@ -15,6 +16,7 @@ const MainMenu = (props) => {
 						)
 					}
 				</ul>
+				<hr/>
 			</div>
 	);
 };

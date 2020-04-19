@@ -1,7 +1,7 @@
 module.exports = {
   pathPrefix: `/gatsby-reaact-wp`,
   siteMetadata: {
-    // siteUrl: "https://github.com/pch2103/gatsby-reaact-wp",
+    siteUrl: `https://pch2103.github.io/gatsby-reaact-wp/`,
     title: `CHE testing Gatsby`,
     description: `CHE testing Gatsby`,
     author: `@CHE`,
@@ -22,7 +22,7 @@ module.exports = {
       options: {
         name: `gatsby-starter-default`,
         short_name: `starter`,
-        start_url: `/`,
+        start_url: `src/images`,
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
@@ -33,12 +33,16 @@ module.exports = {
       resolve: "gatsby-source-wordpress",
       options: {
         // I have created a dummy site for us to use with the plugins we discussed
-        baseUrl: "localhost:8001",
+        baseUrl: "http://localhost:8001",
         protocol: "http",
         hostingWPCOM: false,
         // We will be using some advanced custom fields
         useACF: true,
         verboseOutput: true,
+        // searchAndReplaceContentUrls: {
+        //   sourceUrl: "http://localhost:8001",
+        //   replacementUrl: "https://pch2103.github.io/gatsby-reaact-wp",
+        // },
       },
       concurrentRequests: 10,
       includedRoutes: [
@@ -52,10 +56,19 @@ module.exports = {
         "**/*/*/menus",
         "**/*/*/menu-locations",
       ],
-      excludedRoutes: [],
-      normalizer: function({ entities }) {
+      normalizer: function ({ entities }) {
         return entities
       },
+      normalizers: normalizers => [
+        ...normalizers,
+        {
+          name: "nameOfTheFunction",
+          normalizer: function ({ entities }) {
+            // manipulate entities here
+            return entities
+          },
+        },
+      ],
     },
     `gatsby-plugin-sass`,
     `gatsby-plugin-sitemap`,
