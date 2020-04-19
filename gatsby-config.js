@@ -1,5 +1,7 @@
 module.exports = {
+  pathPrefix: `/gatsby-reaact-wp`,
   siteMetadata: {
+    // siteUrl: "https://github.com/pch2103/gatsby-reaact-wp",
     title: `CHE testing Gatsby`,
     description: `CHE testing Gatsby`,
     author: `@CHE`,
@@ -24,7 +26,7 @@ module.exports = {
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/che.png`, // This path is relative to the root of the site.
       },
     },
     {
@@ -37,6 +39,22 @@ module.exports = {
         // We will be using some advanced custom fields
         useACF: true,
         verboseOutput: true,
+      },
+      concurrentRequests: 10,
+      includedRoutes: [
+        "**/categories",
+        "**/posts",
+        "**/pages",
+        "**/media",
+        "**/tags",
+        "**/taxonomies",
+        // "**/users",
+        "**/*/*/menus",
+        "**/*/*/menu-locations",
+      ],
+      excludedRoutes: [],
+      normalizer: function({ entities }) {
+        return entities
       },
     },
     `gatsby-plugin-sass`,

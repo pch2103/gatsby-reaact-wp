@@ -3,7 +3,7 @@ import {Link} from "gatsby"
 
 const MainMenu = (props) => {
 	const data = props.menu.edges[0].node.items
-	console.log("MAIN_MENU", data)
+	// console.log("MAIN_MENU", data)
 	return (
 			<div>
 				<ul>
